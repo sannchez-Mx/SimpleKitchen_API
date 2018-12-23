@@ -5,14 +5,13 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./scratch');
 
 router.post("/new/:id", (req, res) => {
-  console.log(req.body)
   Comment.create({
     _recipe: req.params.id,
-    _user: req.body.user._id,
+    _user: req.body._user,
     comment: req.body.comment,
     rating: req.body.rating
   })
-    .then((res) => {
+    .then(() => {
       res.status(201).json({ msg: "Comentario publicado" });
     })
     .catch(err => {
@@ -20,5 +19,14 @@ router.post("/new/:id", (req, res) => {
     });
 });
 
+router.get("/allComments",  (req, res) => {
+  Comment.find()
+    .sort({ created_at: 1 })
+    .populate("_user")
+    .then(Comments => res.status(201).json({ Comments }))
+    .catch(err => {
+      res.status(500).json({ err, msg: "Error al mostrar los comentarios" });
+    });
+});
 
 module.exports = router;
