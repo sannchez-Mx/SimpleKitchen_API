@@ -26,8 +26,8 @@ router.post("/new/:id", (req, res) => {
     });
 });
 
-router.get("/allComments",  (req, res) => {
-  Comment.find()
+router.get("/allComments/:id",  (req, res) => {
+  Comment.find({_recipe: req.params.id })
     .sort({ created_at: -1 })
     .populate("_user")
     .then(Comments => res.status(201).json({ Comments }))
