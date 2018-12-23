@@ -15,11 +15,15 @@ const commentSchema = new Schema(
     },
     comment: {
       type: String,
-      //require: true
+      require: true
     },
     rating: {
       type: Number,
-      //required: true
+      required: true
+    },
+    date: {
+      type: String,
+      required: true
     }
   },
   {

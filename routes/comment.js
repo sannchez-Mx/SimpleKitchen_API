@@ -5,11 +5,18 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./scratch');
 
 router.post("/new/:id", (req, res) => {
+  let a = new Date().getFullYear();
+  let m = new Date().getMonth() + 1;
+  let d = new Date().getDate();
+  let h = new Date().getHours();
+  let min = new Date().getMinutes();
+  let fullDate = a + "/" + m + "/" + d + "..." + h + ":" + min;
   Comment.create({
     _recipe: req.params.id,
     _user: req.body._user,
     comment: req.body.comment,
-    rating: req.body.rating
+    rating: req.body.rating,
+    date: fullDate
   })
     .then(() => {
       res.status(201).json({ msg: "Comentario publicado" });
@@ -21,7 +28,7 @@ router.post("/new/:id", (req, res) => {
 
 router.get("/allComments",  (req, res) => {
   Comment.find()
-    .sort({ created_at: 1 })
+    .sort({ created_at: -1 })
     .populate("_user")
     .then(Comments => res.status(201).json({ Comments }))
     .catch(err => {
