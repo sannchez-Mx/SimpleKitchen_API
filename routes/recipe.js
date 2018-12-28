@@ -13,7 +13,6 @@ router.get("/recipes/:id", (req, res) => {
 });
 
 router.post("/new/:id", upload.array("images"), (req, res) => {
-
   console.log(req.files);
 
   let recipe = {};
@@ -55,9 +54,10 @@ router.post("/new/:id", upload.array("images"), (req, res) => {
     return;
   }
 
-  if(req.files) recipe.images = req.files.map(image =>{
-    return image.url
-  })
+  if (req.files.length > 0)
+    recipe.images = req.files.map(image => {
+      return image.url;
+    });
 
   Recipe.create({
     _user: req.params.id,
@@ -80,10 +80,16 @@ router.post("/new/:id", upload.array("images"), (req, res) => {
 });
 
 router.post("/editRecipe/:id", upload.array("images"), (req, res) => {
+  console.log(req.files);
   let recipe = {};
   Object.keys(req.body).forEach(key => {
     recipe[key] = req.body[key];
   });
+  if (req.files.length > 0) {
+    recipe.images = req.files.map(image => {
+      return image.url;
+    });
+  }
   Recipe.findByIdAndUpdate(req.params.id, { $set: recipe }, { new: true })
     .then(() => {
       res.status(200).json({ recipe, msg: "Receta actualizada" });
@@ -102,7 +108,7 @@ router.get("/recipeDetail/:id", (req, res) => {
     });
 });
 
-router.get("/allRecipes",  (req, res) => {
+router.get("/allRecipes", (req, res) => {
   Recipe.find()
     .sort({ name: 1 })
     .populate("_user")

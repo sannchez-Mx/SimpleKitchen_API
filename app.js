@@ -68,6 +68,8 @@ const recipe = require('./routes/recipe');
 app.use('/recipe', recipe);
 const comment = require('./routes/comment');
 app.use('/comment', comment);
+const search = require('./routes/search');
+app.use('/search', search);
 
 
 module.exports = app;
