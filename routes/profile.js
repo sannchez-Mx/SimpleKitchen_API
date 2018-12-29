@@ -36,4 +36,11 @@ router.patch("/profilePicture/:id", upload.single("profilePicture"), (req, res) 
       });
 });
 
+router.post("/profile/:id/delete", (req, res)=>{
+  User.findOneAndDelete(req.params._id)
+  .then(()=>{
+    res.redirect("/")
+  });
+});
+
 module.exports = router;
