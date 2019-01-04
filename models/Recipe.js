@@ -29,11 +29,6 @@ const recipeSchema = new Schema(
       type: Number,
       require: "Ingresa las porciones"
     }, 
-    _category: {
-      type: [Schema.Types.ObjectId],
-      ref: "Category",
-      required: 'Prorciona una categoria'
-    },
     ingredients: {
       type: [String],
       required: "Los ingredientes deben de ser proporcionados"

@@ -50,7 +50,7 @@ router.post("/signup", (req, res) => {
         password: hashedPassword
       })
         .then(() => {
-          res.status(201).json({ msg: "Usuario creado con éxito" });
+          res.status(201).json({ msg: "Usuario registrado con éxito" });
         })
         .catch(err => {
           res.status(500).json({ err, msg: "No se pudo crear usuario" });

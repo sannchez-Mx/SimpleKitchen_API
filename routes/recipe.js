@@ -5,7 +5,6 @@ const upload = require("../helpers/multer");
 
 router.get("/recipes/:id", (req, res) => {
   Recipe.find({ _user: req.params.id })
-    .populate("Category")
     .then(items => res.status(201).json({ items }))
     .catch(err => {
       res.status(500).json({ err, msg: "No se pudo crear la receta" });
@@ -116,6 +115,16 @@ router.get("/allRecipes", (req, res) => {
     .catch(err => {
       res.status(500).json({ err, msg: "Error al mostrar las recetas" });
     });
+});
+
+router.post("/delete/:id", (req, res) => {
+  Recipe.findByIdAndDelete(req.params.id)
+  .then(() => {
+    res.status(201).json({msg: "Receta borrada con éxito"})
+  })
+  .catch(err => {
+    res.status(500).json({err, msg: "Error al borrar la receta"})
+  })
 });
 
 module.exports = router;
