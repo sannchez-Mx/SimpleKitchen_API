@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Recipe = require("../models/Recipe");
+const Comentario = require("../models/Comment");
+const Favorite = require("../models/Favorite");
 const upload = require("../helpers/multer");
 
 router.get("/recipes/:id", (req, res) => {
@@ -118,13 +120,21 @@ router.get("/allRecipes", (req, res) => {
 });
 
 router.post("/delete/:id", (req, res) => {
-  Recipe.findByIdAndDelete(req.params.id)
-  .then(() => {
-    res.status(201).json({msg: "Receta borrada con éxito"})
-  })
-  .catch(err => {
-    res.status(500).json({err, msg: "Error al borrar la receta"})
-  })
+
+  let p1 = new Promise((resolve, reject) => { 
+    setTimeout(resolve(Recipe.findByIdAndDelete(req.params.id)), 1000, "two"); 
+  });
+  let p2 = new Promise((resolve, reject) => { 
+    setTimeout(resolve(Comentario.findOneAndDelete({_recipe: req.params.id})), 2000, "one"); 
+  });
+  let p3 = new Promise((resolve, reject) => {
+    setTimeout(resolve(Favorite.findOneAndDelete({_recipe: req.params.id})), 3000, "three");
+  });
+  Promise.all([p1, p2, p3]).then(values => { 
+    res.status(201).json({values, msg: "Receta borrada con éxito"})
+  }).catch(reason => { 
+    res.status(500).json({reason, msg: "Error al borrar la receta"})
+  });
 });
 
 module.exports = router;
