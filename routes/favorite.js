@@ -4,6 +4,7 @@ const Favorite = require("../models/Favorite");
 
 router.post("/new/:id", (req, res) => {
   console.log("=====>", req.body);
+  
   Favorite.create({
     _recipe: req.params.id,
     _userF: req.body._user
