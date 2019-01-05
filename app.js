@@ -73,5 +73,8 @@ app.use('/search', search);
 const favorite = require('./routes/favorite');
 app.use('/favorite', favorite);
 
+app.all("*", (req,res) => {
+  res.sendFile(`${__dirname}/public/index.html`);
+});
 
 module.exports = app;
